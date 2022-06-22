@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
-import { Todo } from "../models/models";
+import { Todo } from "../../models/models";
 import { Draggable } from "react-beautiful-dnd";
 
 const SingleTodo: React.FC<{
@@ -61,7 +61,7 @@ const SingleTodo: React.FC<{
           ) : (
             <span className="todos__single--text">{todo.todo}</span>
           )}
-          <div>
+          <div className="flex">
             <span
               className="icon"
               onClick={() => {
