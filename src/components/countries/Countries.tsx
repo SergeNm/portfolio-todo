@@ -7,6 +7,7 @@ import SingleCountry from "./SingleCountry";
 import { fetchAllCountries } from "../../redux/thunks/countriesThunk";
 import Spinner from "../app/Spinner";
 import classNames from "../../utils/classNames";
+import HomeButton from "../app/HomeButton";
 
 const Countries = () => {
   const { themeName } = useAppSelector((state) => state.theme.theme);
@@ -19,11 +20,12 @@ const Countries = () => {
   }, [dispatch]);
   return (
     <div className={
-      "py-8 " +
+      "py-2 h-full " +
       classNames(themeName === "dark" ? "text-gray-200 bg-gray-700" : "text-gray-700")
     }>
+      <HomeButton />
       <Header themeName={themeName} />
-      <div className="p-16 md:flex justify-between">
+      <div className="p-8 md:flex justify-between">
         <Search /> <Filter />
       </div>
       <div className="p-8 pt-2 md:flex flex-wrap justify-around">

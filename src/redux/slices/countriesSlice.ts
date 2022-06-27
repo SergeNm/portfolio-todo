@@ -58,5 +58,4 @@ const countriesSlice = createSlice({
 });
 
 export const countriesReducer = countriesSlice.reducer;
-export const { setKeyword, searchCountry, filterByRegion } =
-  countriesSlice.actions;
+export const { setKeyword, searchCountry, filterByRegion } = countriesSlice.actions;

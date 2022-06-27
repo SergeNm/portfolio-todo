@@ -3,6 +3,7 @@ import InputField from "./InputField";
 import TodoList from "./TodoList";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Todo } from "../../models/models";
+import HomeButton from "../app/HomeButton";
 
 const TodoApp: React.FC = () => {
   const [todo, setTodo] = useState<string>("");
@@ -58,18 +59,21 @@ const TodoApp: React.FC = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="App">
-        <span className="heading">Todo App</span>
-        <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-        <TodoList
-          todos={todos}
-          setTodos={setTodos}
-          CompletedTodos={CompletedTodos}
-          setCompletedTodos={setCompletedTodos}
-        />
-      </div>
-    </DragDropContext>
+    <div>
+      <HomeButton />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="App">
+          <span className="heading">Todo App</span>
+          <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
+          <TodoList
+            todos={todos}
+            setTodos={setTodos}
+            CompletedTodos={CompletedTodos}
+            setCompletedTodos={setCompletedTodos}
+          />
+        </div>
+      </DragDropContext>
+    </div>
   );
 };
 

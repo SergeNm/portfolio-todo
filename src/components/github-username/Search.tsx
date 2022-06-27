@@ -1,23 +1,31 @@
 import React, { useEffect, useRef } from "react";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
-import { searchCountry, setKeyword } from "../../redux/slices/countriesSlice";
+import { setHistory, setQuery } from "../../redux/slices/search.slice";
+import { searchUsers } from "../../redux/thunks/users.thunk";
 
 const Search = () => {
   const dispatch = useAppDispatch();
-  const keywordRef = useRef<HTMLInputElement>(null);
-  const keyword = useAppSelector((state) => state.countries.keyword);
+  const queryRef = useRef<HTMLInputElement>(null);
+  const query = useAppSelector((state) => state.search.query);
 
   const search = () => {
-    dispatch(setKeyword(String(keywordRef.current?.value)));
+    dispatch(setQuery(String(queryRef.current?.value)));
   };
 
   useEffect(()=>{
-    dispatch(searchCountry())
-  }, [keyword, dispatch])
+    const timeOutId =  setTimeout(() => 
+      dispatch(searchUsers({query}))
+    , 500);
+    return () => clearTimeout(timeOutId);
+  }, [query, dispatch])
 
   return (
     <div>
-      <form className="flex items-center">
+      <form className="flex items-center" onSubmit={(e)=>{
+        e.preventDefault();
+        search();
+        dispatch(setHistory(query));
+      }}>
         <label htmlFor="simple-search" className="sr-only">
           Search
         </label>
@@ -41,7 +49,7 @@ const Search = () => {
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-80 pl-10 p-2.5 "
             placeholder="Search"
-            ref={keywordRef}
+            ref={queryRef}
             onChange={search}
             required
           />

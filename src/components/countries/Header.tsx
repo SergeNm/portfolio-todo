@@ -11,7 +11,7 @@ const Header = ({ themeName }: Theme) => {
   return (
     <div
       className={
-        "md:px-8 h-8  shadow-lg " +
+        "md:p-4 shadow-sm border-b-2 " +
         classNames(themeName === "dark" ? "text-gray-200 bg-gray-700" : "")
       }
     >
