@@ -38,14 +38,6 @@ const SingleTodo: React.FC<{
     );
   };
 
-  const handleDone = (id: number) => {
-    // setTodos(
-    //   todos.map((todo) =>
-    //     todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    //   )
-    // );
-  };
-
   return (
     <Draggable draggableId={todo.id.toString()} index={index}>
       {(provided, snapshot) => (
@@ -86,7 +78,18 @@ const SingleTodo: React.FC<{
             <span className="icon" onClick={() => handleDelete(todo)}>
               <AiFillDelete />
             </span>
-            <span className="icon" onClick={() => handleDone(todo.id)}>
+            <span
+              className="icon"
+              onClick={() => {
+                dispatch(
+                  updateTodo({
+                    id: todo.id,
+                    title: editTodo,
+                    completed: !todo.completed,
+                  } as Todo)
+                );
+              }}
+            >
               <MdDone />
             </span>
           </div>
