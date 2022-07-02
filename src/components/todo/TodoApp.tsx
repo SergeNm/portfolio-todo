@@ -3,7 +3,6 @@ import InputField from "./InputField";
 import TodoList from "./TodoList";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Todo } from "../../models/models";
-import HomeButton from "../app/HomeButton";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 import { fetchAllTodos, updateTodo } from "src/redux/thunks/todoThunk";
 
@@ -53,7 +52,6 @@ const TodoApp: React.FC = () => {
 
   return (
     <div>
-      <HomeButton />
       <DragDropContext
         onDragEnd={onDragEnd}
         onDragStart={(el) =>
