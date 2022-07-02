@@ -5,9 +5,10 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Todo } from "../../models/models";
 import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 import { fetchAllTodos, updateTodo } from "src/redux/thunks/todoThunk";
+import WarningAlter from "./WarningAlter";
 
 const TodoApp: React.FC = () => {
-  const { todos } = useAppSelector((state) => state.todos);
+  const { todos, hasError } = useAppSelector((state) => state.todos);
   const [todo, setTodo] = useState<Todo>();
   const dispatch = useAppDispatch();
 
@@ -52,6 +53,7 @@ const TodoApp: React.FC = () => {
 
   return (
     <div>
+      {hasError && <WarningAlter/>}
       <DragDropContext
         onDragEnd={onDragEnd}
         onDragStart={(el) =>

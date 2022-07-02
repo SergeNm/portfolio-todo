@@ -1,10 +1,3 @@
 {
-  "todos": [
-    {
-      "title": "yes?",
-      "completed": false,
-      "createdAt": "2022-07-02T17:34:12.138Z",
-      "id": 2
-    }
-  ]
+  "todos": []
 }
