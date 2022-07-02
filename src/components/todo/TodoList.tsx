@@ -1,21 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Todo } from "../../models/models";
 import SingleTodo from "./SingleTodo";
 import { Droppable } from "react-beautiful-dnd";
+import { fetchAllTodos } from "src/redux/thunks/todoThunk";
+import { useAppDispatch } from "src/redux/hooks";
 
 interface props {
   todos: Array<Todo>;
-  setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
-  setCompletedTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
-  CompletedTodos: Array<Todo>;
 }
 
 const TodoList: React.FC<props> = ({
   todos,
-  setTodos,
-  CompletedTodos,
-  setCompletedTodos,
 }) => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchAllTodos());
+  }, [dispatch]);
   return (
     <div className="container">
       <Droppable droppableId="TodosList">
@@ -27,12 +27,11 @@ const TodoList: React.FC<props> = ({
           >
             <span className="todos__heading">Active Tasks</span>
             {todos?.map((todo, index) => (
+              !todo.completed &&
               <SingleTodo
                 index={index}
-                todos={todos}
                 todo={todo}
                 key={todo.id}
-                setTodos={setTodos}
               />
             ))}
             {provided.placeholder}
@@ -49,13 +48,12 @@ const TodoList: React.FC<props> = ({
             }`}
           >
             <span className="todos__heading">Completed Tasks</span>
-            {CompletedTodos?.map((todo, index) => (
+            {todos?.map((todo, index) => (
+              todo.completed &&
               <SingleTodo
                 index={index}
-                todos={CompletedTodos}
                 todo={todo}
                 key={todo.id}
-                setTodos={setCompletedTodos}
               />
             ))}
             {provided.placeholder}

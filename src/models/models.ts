@@ -1,7 +1,7 @@
 export interface Todo {
   id: number;
   todo: string;
-  isDone: boolean;
+  completed: boolean;
 }
 
 export interface Operation {
@@ -32,6 +32,12 @@ export interface Country {
   capital: string,
   region: string,
   area: string | number
+}
+
+export interface Todo {
+  title: string,
+  id: number,
+  completed: boolean,
 }
 
 export interface User {

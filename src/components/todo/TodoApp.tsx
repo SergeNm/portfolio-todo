@@ -1,29 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "./InputField";
 import TodoList from "./TodoList";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Todo } from "../../models/models";
 import HomeButton from "../app/HomeButton";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { fetchAllTodos, updateTodo } from "src/redux/thunks/todoThunk";
 
 const TodoApp: React.FC = () => {
-  const [todo, setTodo] = useState<string>("");
-  const [todos, setTodos] = useState<Array<Todo>>([]);
-  const [CompletedTodos, setCompletedTodos] = useState<Array<Todo>>([]);
+  const { todos } = useAppSelector((state) => state.todos);
+  const [todo, setTodo] = useState<Todo>();
+  const dispatch = useAppDispatch();
 
-  const handleAdd = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (todo) {
-      setTodos([...todos, { id: Date.now(), todo, isDone: false }]);
-      setTodo("");
-    }
+  const handleEdit = () => {
+    dispatch(
+      updateTodo({
+        id: todo?.id,
+        title: todo?.title,
+        completed: !todo?.completed,
+      } as Todo)
+    );
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(fetchAllTodos());
+    }, 500);
+  }, [todos, dispatch]);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
-
-    console.log(result);
-
     if (!destination) {
       return;
     }
@@ -35,41 +41,30 @@ const TodoApp: React.FC = () => {
       return;
     }
 
-    let add;
-    let active = todos;
-    let complete = CompletedTodos;
-    // Source Logic
-    if (source.droppableId === "TodosList") {
-      add = active[source.index];
-      active.splice(source.index, 1);
-    } else {
-      add = complete[source.index];
-      complete.splice(source.index, 1);
+    if (
+      (source.droppableId === "TodosList" &&
+        destination.droppableId === "TodosRemove") ||
+      (source.droppableId === "TodosRemove" &&
+        destination.droppableId === "TodosList")
+    ) {
+      handleEdit();
     }
-
-    // Destination Logic
-    if (destination.droppableId === "TodosList") {
-      active.splice(destination.index, 0, add);
-    } else {
-      complete.splice(destination.index, 0, add);
-    }
-
-    setCompletedTodos(complete);
-    setTodos(active);
   };
 
   return (
     <div>
       <HomeButton />
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext
+        onDragEnd={onDragEnd}
+        onDragStart={(el) =>
+          setTodo(todos.find((todo) => todo.id === parseInt(el.draggableId)))
+        }
+      >
         <div className="App">
           <span className="heading">Todo App</span>
-          <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
+          <InputField />
           <TodoList
             todos={todos}
-            setTodos={setTodos}
-            CompletedTodos={CompletedTodos}
-            setCompletedTodos={setCompletedTodos}
           />
         </div>
       </DragDropContext>

@@ -1,21 +1,24 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import { useAppDispatch } from "src/redux/hooks";
+import { addTodo } from "src/redux/thunks/todoThunk";
 import "./styles.css";
 
-interface props {
-  todo: string;
-  setTodo: React.Dispatch<React.SetStateAction<string>>;
-  handleAdd: (e: React.FormEvent) => void;
-}
-
-const InputField: React.FC<props> = ({ todo, setTodo, handleAdd }) => {
+const InputField = () => {
+  const dispatch = useAppDispatch();
+  const [todo, setTodo] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const handleAdd = useCallback(() => {
+    dispatch(addTodo(todo));
+    setTodo("");
+  }, [dispatch, todo]);
 
   return (
     <form
       className="input"
       onSubmit={(e) => {
-        handleAdd(e);
+        handleAdd();
         inputRef.current?.blur();
+        e.preventDefault();
       }}
     >
       <input
